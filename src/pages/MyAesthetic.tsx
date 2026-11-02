@@ -219,7 +219,7 @@ function ShareCard({ refEl, result: { a, b, pct } }: CardProps) {
 function InvitePanel({ result }: { result: Result }) {
   const [nick, setNick] = useStored<string>('aura.nick', '')
   const [copied, setCopied] = useState(false)
-  const link = `${window.location.origin}/match?u=${encodeMatch(result, nick || 'Your friend')}`
+  const link = `${window.location.origin}${import.meta.env.BASE_URL}match?u=${encodeMatch(result, nick || 'Your friend')}`
   const text = `I got my AURA aesthetic ✨ Take the quiz and see how vibe-compatible we are: ${link}`
   return (
     <div className="mt-8 rounded-3xl bg-surface border border-ink/10 p-5">

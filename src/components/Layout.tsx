@@ -22,7 +22,9 @@ export default function Layout() {
     applyTheme(active?.theme ?? DEFAULT_THEME)
   }, [active])
 
-  useEffect(() => window.scrollTo(0, 0), [pathname])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   return (
     <div className="min-h-screen pb-24 md:pb-0">

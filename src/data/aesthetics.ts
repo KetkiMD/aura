@@ -54,12 +54,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#efe6d8"
   ],
   "theme": {
-   "bg": "#1c1612",
-   "surface": "#2a211b",
-   "ink": "#efe6d8",
-   "muted": "#b9a991",
-   "accent": "#c08a52",
-   "accent2": "#6b2d2a"
+   "bg": "#2b1d14",
+   "surface": "#3a2a1e",
+   "ink": "#f1e4cf",
+   "muted": "#c4a988",
+   "accent": "#d19a5b",
+   "accent2": "#7a2e2a"
   },
   "related": [
    "old-money",
@@ -155,12 +155,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#2b2622"
   ],
   "theme": {
-   "bg": "#f7f3ee",
-   "surface": "#ffffff",
-   "ink": "#2b2622",
-   "muted": "#8a7f75",
-   "accent": "#b88e68",
-   "accent2": "#e9d8c8"
+   "bg": "#ead9c6",
+   "surface": "#f5ebe0",
+   "ink": "#3a2c22",
+   "muted": "#8a7462",
+   "accent": "#a9774f",
+   "accent2": "#d9bfa4"
   },
   "related": [
    "minimal",
@@ -256,12 +256,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#4a2430"
   ],
   "theme": {
-   "bg": "#fff1f3",
-   "surface": "#ffffff",
-   "ink": "#4a2430",
-   "muted": "#a07080",
-   "accent": "#e07895",
-   "accent2": "#f7c6d0"
+   "bg": "#f9cfda",
+   "surface": "#fde6ec",
+   "ink": "#5a1f33",
+   "muted": "#9c5a70",
+   "accent": "#d94f7a",
+   "accent2": "#f7a8bd"
   },
   "related": [
    "fairycore",
@@ -347,11 +347,11 @@ export const AESTHETICS: Aesthetic[] = [
    "#2f3a26"
   ],
   "theme": {
-   "bg": "#f3efe1",
-   "surface": "#fbf8ee",
-   "ink": "#2f3a26",
-   "muted": "#7b8566",
-   "accent": "#6f8f50",
+   "bg": "#cfdcb8",
+   "surface": "#e4ecd3",
+   "ink": "#2f3a22",
+   "muted": "#5f6d4d",
+   "accent": "#5f7f3f",
    "accent2": "#d9a35b"
   },
   "related": [
@@ -451,12 +451,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#f5ecff"
   ],
   "theme": {
-   "bg": "#120a24",
-   "surface": "#1f1438",
-   "ink": "#f5ecff",
-   "muted": "#b7a3d9",
-   "accent": "#ff4fd8",
-   "accent2": "#4fd8ff"
+   "bg": "#3b1d6e",
+   "surface": "#4c2a87",
+   "ink": "#fbefff",
+   "muted": "#cdb6ee",
+   "accent": "#ff5fd2",
+   "accent2": "#5ee3ff"
   },
   "related": [
    "streetwear",
@@ -541,12 +541,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#1f2a24"
   ],
   "theme": {
-   "bg": "#f4f1ea",
-   "surface": "#fffdf8",
-   "ink": "#1f2a24",
-   "muted": "#6f7a72",
-   "accent": "#23432f",
-   "accent2": "#b89b5e"
+   "bg": "#1f3a2b",
+   "surface": "#2a4a38",
+   "ink": "#f3ecdc",
+   "muted": "#b9c4b0",
+   "accent": "#d1b26f",
+   "accent2": "#8a6d3b"
   },
   "related": [
    "coastal",
@@ -626,12 +626,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#3b2a20"
   ],
   "theme": {
-   "bg": "#f6ece2",
-   "surface": "#fff8f1",
-   "ink": "#3b2a20",
-   "muted": "#8f7461",
-   "accent": "#c46a3d",
-   "accent2": "#d9a066"
+   "bg": "#e8b48f",
+   "surface": "#f2cbad",
+   "ink": "#3d2416",
+   "muted": "#7c5038",
+   "accent": "#a94a22",
+   "accent2": "#f4dfc8"
   },
   "related": [
    "cottagecore",
@@ -726,12 +726,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#fbe9d2"
   ],
   "theme": {
-   "bg": "#2a0f12",
-   "surface": "#3d171b",
-   "ink": "#fbe9d2",
-   "muted": "#d8b48e",
-   "accent": "#e8a53a",
-   "accent2": "#c2364a"
+   "bg": "#7a1d2b",
+   "surface": "#8d2a37",
+   "ink": "#fdebd3",
+   "muted": "#f0bfa0",
+   "accent": "#f4b13e",
+   "accent2": "#e8566a"
   },
   "related": [
    "royal-rajasthani",
@@ -818,12 +818,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#f2f2f2"
   ],
   "theme": {
-   "bg": "#111111",
-   "surface": "#1d1d1d",
-   "ink": "#f2f2f2",
-   "muted": "#a3a3a3",
-   "accent": "#ff5a1f",
-   "accent2": "#c9c9c9"
+   "bg": "#1d2440",
+   "surface": "#283154",
+   "ink": "#f4f4f4",
+   "muted": "#a7b0c8",
+   "accent": "#ff6a2b",
+   "accent2": "#d7ff3d"
   },
   "related": [
    "y2k",
@@ -899,12 +899,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#d9d4cc"
   ],
   "theme": {
-   "bg": "#141414",
-   "surface": "#212121",
-   "ink": "#e8e3db",
-   "muted": "#9a958d",
-   "accent": "#b8323f",
-   "accent2": "#5b6b5a"
+   "bg": "#3a2f3d",
+   "surface": "#4a3c4e",
+   "ink": "#ece4ea",
+   "muted": "#b3a3b1",
+   "accent": "#e05565",
+   "accent2": "#8fa38c"
   },
   "related": [
    "streetwear",
@@ -977,12 +977,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#e9dcc5"
   ],
   "theme": {
-   "bg": "#f5f8fa",
-   "surface": "#ffffff",
-   "ink": "#16384f",
-   "muted": "#6a8597",
-   "accent": "#2f7fb0",
-   "accent2": "#cfe3ee"
+   "bg": "#bfdcef",
+   "surface": "#dcecf7",
+   "ink": "#12364f",
+   "muted": "#4a6a80",
+   "accent": "#1f6fa3",
+   "accent2": "#f2e2c4"
   },
   "related": [
    "old-money",
@@ -1069,12 +1069,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#f6f1e7"
   ],
   "theme": {
-   "bg": "#16201a",
-   "surface": "#21302a",
-   "ink": "#eef3ea",
-   "muted": "#a8bba9",
-   "accent": "#b9a3e3",
-   "accent2": "#8fb996"
+   "bg": "#c9bfe6",
+   "surface": "#ddd5f1",
+   "ink": "#2d2547",
+   "muted": "#625785",
+   "accent": "#6f50bd",
+   "accent2": "#9fc7a3"
   },
   "related": [
    "cottagecore",
@@ -1170,12 +1170,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#1e1d1b"
   ],
   "theme": {
-   "bg": "#f4f3f0",
-   "surface": "#ffffff",
-   "ink": "#1e1d1b",
-   "muted": "#7b766e",
-   "accent": "#5c5852",
-   "accent2": "#dcd8d0"
+   "bg": "#d9d4cb",
+   "surface": "#e8e4dd",
+   "ink": "#1f1e1c",
+   "muted": "#6a655d",
+   "accent": "#3e3b36",
+   "accent2": "#b9b2a6"
   },
   "related": [
    "clean-girl",
@@ -1269,11 +1269,11 @@ export const AESTHETICS: Aesthetic[] = [
    "#2a211b"
   ],
   "theme": {
-   "bg": "#fbf3e6",
-   "surface": "#fffaf1",
-   "ink": "#2a211b",
-   "muted": "#8a7766",
-   "accent": "#c1492f",
+   "bg": "#f2c46b",
+   "surface": "#f7d892",
+   "ink": "#3a2416",
+   "muted": "#6e4a28",
+   "accent": "#a83b23",
    "accent2": "#2f6b62"
   },
   "related": [
@@ -1361,12 +1361,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#f6e7d2"
   ],
   "theme": {
-   "bg": "#2a1214",
-   "surface": "#3a1a1d",
-   "ink": "#f6e7d2",
-   "muted": "#d8b49a",
-   "accent": "#d4a24c",
-   "accent2": "#8e1f2c"
+   "bg": "#e9a3a0",
+   "surface": "#f2c0bc",
+   "ink": "#4a1218",
+   "muted": "#7e343a",
+   "accent": "#8e1f2c",
+   "accent2": "#d4a24c"
   },
   "related": [
    "desi-retro",
@@ -1450,12 +1450,12 @@ export const AESTHETICS: Aesthetic[] = [
    "#4a3f45"
   ],
   "theme": {
-   "bg": "#fff6f1",
-   "surface": "#ffffff",
-   "ink": "#4a3f45",
-   "muted": "#9a8a90",
-   "accent": "#ef8f86",
-   "accent2": "#b6c9e8"
+   "bg": "#ffd9c7",
+   "surface": "#ffe8dc",
+   "ink": "#4a3240",
+   "muted": "#8a6573",
+   "accent": "#e0645b",
+   "accent2": "#a9c1ec"
   },
   "related": [
    "coquette",

@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AESTHETICS, byId, pexelsUrl } from '../data/aesthetics'
-import { QUIZ } from '../data/quiz'
-import { todayISO, useResult, useVibe } from '../lib/store'
+import { OPTIONS_PER_QUESTION, PICK_POINTS, QUIZ, RELATED_POINTS } from '../data/quiz'
+import { todayISO, useResult, useStored, useVibe } from '../lib/store'
 
 function shuffle<T>(arr: T[]) {
   const a = [...arr]
@@ -13,28 +13,53 @@ function shuffle<T>(arr: T[]) {
   return a
 }
 
+function score(picks: string[]) {
+  const s: Record<string, number> = Object.fromEntries(AESTHETICS.map((a) => [a.id, 0]))
+  for (const id of picks) {
+    s[id] += PICK_POINTS
+    for (const r of byId(id)!.related) s[r] += RELATED_POINTS
+  }
+  return s
+}
+
+function rank(scores: Record<string, number>, picks: string[]) {
+  const first = (id: string) => (picks.includes(id) ? picks.indexOf(id) : 99)
+  return AESTHETICS.map((a) => a.id).sort((x, y) => scores[y] - scores[x] || first(x) - first(y))
+}
+
+function optionsFor(picks: string[]) {
+  if (!picks.length) return shuffle(AESTHETICS.map((a) => a.id)).slice(0, OPTIONS_PER_QUESTION)
+  const leaders = rank(score(picks), picks).slice(0, OPTIONS_PER_QUESTION / 2)
+  const rest = shuffle(AESTHETICS.map((a) => a.id).filter((id) => !leaders.includes(id)))
+  return shuffle([...leaders, ...rest.slice(0, OPTIONS_PER_QUESTION - leaders.length)])
+}
+
 export default function Quiz() {
   const navigate = useNavigate()
   const [, setResult] = useResult()
   const [, setVibe] = useVibe()
+  const [pendingMatch, setPendingMatch] = useStored<string | null>('aura.pendingMatch', null)
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<string[]>([])
-  const questions = useMemo(() => QUIZ.map((q) => ({ ...q, options: shuffle(q.options) })), [])
-  const q = questions[step]
+  const [optionSets, setOptionSets] = useState<string[][]>(() => [optionsFor([])])
+  const q = QUIZ[step]
 
   function pick(aesthetic: string) {
     const next = [...answers.slice(0, step), aesthetic]
     setAnswers(next)
-    if (step < questions.length - 1) {
+    if (step < QUIZ.length - 1) {
+      setOptionSets((sets) => [...sets.slice(0, step + 1), optionsFor(next)])
       setStep(step + 1)
       return
     }
-    const scores: Record<string, number> = Object.fromEntries(AESTHETICS.map((a) => [a.id, 0]))
-    next.forEach((id) => (scores[id] += 1))
-    const ranked = AESTHETICS.map((a) => a.id).sort((x, y) => scores[y] - scores[x] || next.indexOf(x) - next.indexOf(y))
-    setResult({ primary: ranked[0], secondary: ranked[1], scores, takenAt: todayISO() })
+    const scores = score(next)
+    const [primary, secondary] = rank(scores, next)
+    setResult({ primary, secondary, scores, takenAt: todayISO() })
     setVibe(null)
-    navigate('/me?new=1')
+    if (pendingMatch) {
+      setPendingMatch(null)
+      navigate(`/match?u=${pendingMatch}`)
+    } else navigate('/me?new=1')
   }
 
   return (
@@ -50,11 +75,11 @@ export default function Quiz() {
         <div className="flex-1 h-1.5 rounded-full bg-ink/10 overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-[#ff9ad5] via-[#b79cff] to-[#7fe3ff] transition-all duration-500"
-            style={{ width: `${((step + 1) / questions.length) * 100}%` }}
+            style={{ width: `${((step + 1) / QUIZ.length) * 100}%` }}
           />
         </div>
         <span className="text-sm text-muted tabular-nums">
-          {step + 1}/{questions.length}
+          {step + 1}/{QUIZ.length}
         </span>
       </div>
 
@@ -63,24 +88,18 @@ export default function Quiz() {
       </h2>
 
       <div key={`${q.id}-grid`} className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 fade-up">
-        {q.options.map((o) => {
-          const a = byId(o.aesthetic)!
-          const selected = answers[step] === o.aesthetic
-          const ring = selected ? 'ring-2 ring-[#b79cff] ring-offset-2 ring-offset-bg' : ''
+        {optionSets[step].map((id) => {
+          const a = byId(id)!
+          const ring = answers[step] === id ? 'ring-2 ring-[#b79cff] ring-offset-2 ring-offset-bg' : ''
           if (q.kind === 'image')
             return (
-              <button key={o.aesthetic} onClick={() => pick(o.aesthetic)} className={`group relative aspect-[3/4] rounded-2xl overflow-hidden ${ring}`}>
-                <img
-                  src={pexelsUrl(a.images[q.imageIndex ?? 0], 500)}
-                  alt=""
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                />
-                <span className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition" />
+              <button key={id} onClick={() => pick(id)} className={`group relative aspect-[3/4] rounded-2xl overflow-hidden bg-ink/5 ${ring}`}>
+                <img src={pexelsUrl(a.images[q.imageIndex], 500)} alt="" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
               </button>
             )
           if (q.kind === 'palette')
             return (
-              <button key={o.aesthetic} onClick={() => pick(o.aesthetic)} className={`group rounded-2xl overflow-hidden border border-ink/10 hover:-translate-y-1 transition ${ring}`}>
+              <button key={id} onClick={() => pick(id)} className={`rounded-2xl overflow-hidden border border-ink/10 hover:-translate-y-1 transition ${ring}`}>
                 <div className="flex h-36 md:h-44">
                   {a.palette.map((c) => (
                     <span key={c} className="flex-1" style={{ background: c }} />
@@ -90,11 +109,11 @@ export default function Quiz() {
             )
           return (
             <button
-              key={o.aesthetic}
-              onClick={() => pick(o.aesthetic)}
+              key={id}
+              onClick={() => pick(id)}
               className={`rounded-2xl border border-ink/10 bg-surface/70 hover:bg-ink/10 p-5 min-h-28 text-left transition hover:-translate-y-1 ${ring}`}
             >
-              {o.label}
+              {a.answers[q.answerKey]}
             </button>
           )
         })}

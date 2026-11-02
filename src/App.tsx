@@ -5,6 +5,7 @@ import Quiz from './pages/Quiz'
 import MyAesthetic from './pages/MyAesthetic'
 import Explore from './pages/Explore'
 import MySpace from './pages/MySpace'
+import Match from './pages/Match'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="me" element={<MyAesthetic />} />
         <Route path="explore" element={<Explore />} />
         <Route path="space" element={<MySpace />} />
+        <Route path="match" element={<Match />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

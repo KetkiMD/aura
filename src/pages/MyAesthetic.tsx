@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import { Link, useSearchParams } from 'react-router-dom'
-import { byId, pexelsUrl } from '../data/aesthetics'
-import { useResult } from '../lib/store'
+import { blendName, blendPalette, byId, pexelsUrl } from '../data/aesthetics'
+import { encodeMatch } from '../lib/match'
+import type { Result } from '../lib/store'
+import { useResult, useStored } from '../lib/store'
 
 export default function MyAesthetic() {
   const [result] = useResult()
@@ -71,9 +73,11 @@ export default function MyAesthetic() {
         <div className="fade-up">
           <p className="text-xs uppercase tracking-[0.35em] text-muted">Your aesthetic is</p>
           <h1 className="font-display text-5xl md:text-7xl mt-3">
-            {a.name} <span className="text-accent">{a.emoji}</span>
+            {blendName(a, b)} <span className="text-accent">{a.emoji}</span>
           </h1>
-          <p className="font-display italic text-2xl text-muted mt-2">with a touch of {b.name}</p>
+          <p className="font-display italic text-2xl text-muted mt-2">
+            {a.name} with a touch of {b.name}
+          </p>
           <p className="mt-6 text-lg max-w-2xl leading-relaxed">{a.description}</p>
 
           <div className="flex flex-wrap gap-2 mt-6">
@@ -86,7 +90,7 @@ export default function MyAesthetic() {
 
           <h3 className="font-display text-2xl mt-12 mb-4">Your palette</h3>
           <div className="grid grid-cols-5 gap-2 md:gap-3">
-            {a.palette.map((c) => (
+            {blendPalette(a, b).map((c) => (
               <button key={c} onClick={() => copy(c)} className="text-left group">
                 <span className="block aspect-square rounded-2xl border border-ink/10 shadow-sm group-hover:-translate-y-1 transition" style={{ background: c }} />
                 <span className="block text-xs mt-2 text-muted uppercase">{copied === c ? 'Copied!' : c}</span>
@@ -143,6 +147,7 @@ export default function MyAesthetic() {
             </button>
           </div>
           <p className="text-xs text-muted text-center mt-3">Post it to your story ✨</p>
+          <InvitePanel result={result} />
         </div>
       </div>
     </div>
@@ -183,15 +188,15 @@ function ShareCard({ refEl, result: { a, b, pct } }: CardProps) {
       </div>
       <div className="relative mt-auto">
         <div className="text-6xl">{a.emoji}</div>
-        <div className="font-display text-5xl leading-none mt-4">{a.name}</div>
+        <div className="font-display text-5xl leading-none mt-4">{blendName(a, b)}</div>
         <div className="font-display italic text-xl mt-2" style={{ color: t.muted }}>
-          × {b.name}
+          {a.name} × {b.name}
         </div>
         <p className="text-sm mt-5 leading-relaxed" style={{ color: t.muted }}>
           {a.tagline}
         </p>
         <div className="flex mt-6 rounded-xl overflow-hidden h-12">
-          {a.palette.map((c) => (
+          {blendPalette(a, b).map((c) => (
             <span key={c} className="flex-1" style={{ background: c }} />
           ))}
         </div>
@@ -206,6 +211,41 @@ function ShareCard({ refEl, result: { a, b, pct } }: CardProps) {
       <div className="relative mt-8 flex justify-between items-end text-xs" style={{ color: t.muted }}>
         <span>{pct}% {a.name.toLowerCase()}</span>
         <span>what’s yours? ✦ aura</span>
+      </div>
+    </div>
+  )
+}
+
+function InvitePanel({ result }: { result: Result }) {
+  const [nick, setNick] = useStored<string>('aura.nick', '')
+  const [copied, setCopied] = useState(false)
+  const link = `${window.location.origin}/match?u=${encodeMatch(result, nick || 'Your friend')}`
+  const text = `I got my AURA aesthetic ✨ Take the quiz and see how vibe-compatible we are: ${link}`
+  return (
+    <div className="mt-8 rounded-3xl bg-surface border border-ink/10 p-5">
+      <h3 className="font-display text-xl">Compare with a friend 💞</h3>
+      <p className="text-sm text-muted mt-1">Send your link. They take the quiz and you both see your vibe match %.</p>
+      <input
+        value={nick}
+        onChange={(e) => setNick(e.target.value)}
+        placeholder="Your name or nickname"
+        maxLength={24}
+        className="w-full mt-4 px-4 py-2.5 rounded-full bg-bg border border-ink/10 outline-none focus:border-accent text-sm"
+      />
+      <div className="grid grid-cols-2 gap-2 mt-3">
+        <a href={`https://wa.me/?text=${encodeURIComponent(text)}`} target="_blank" rel="noreferrer" className="py-2.5 rounded-full bg-[#25D366] text-white text-sm text-center font-medium">
+          WhatsApp
+        </a>
+        <button
+          onClick={() => {
+            navigator.clipboard?.writeText(text)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 1500)
+          }}
+          className="py-2.5 rounded-full border border-ink/20 text-sm"
+        >
+          {copied ? 'Copied!' : 'Copy link'}
+        </button>
       </div>
     </div>
   )

@@ -11,14 +11,14 @@ export default function Music() {
   const saved = !!song && m.playlist.some((s) => s.id === song.id)
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-8 md:py-12 space-y-12">
+    <div className="mx-auto max-w-6xl px-5 pt-8 pb-40 md:py-12 space-y-12">
       <section className="grid md:grid-cols-[1fr_1.3fr] gap-8 items-start">
-        <div>
+        <div className="min-w-0">
           <h1 className="font-display text-4xl md:text-5xl">Music</h1>
           <p className="text-muted mt-2">Search any song, build your playlist, or tune into a vibe.</p>
           {song && (
             <div className="mt-6 rounded-3xl bg-surface/70 border border-ink/10 p-4 flex items-center gap-4">
-              <img src={thumb(song.id)} alt="" className="w-28 aspect-video rounded-xl object-cover" />
+              <img src={thumb(song.id)} alt="" className="w-24 sm:w-28 shrink-0 aspect-video rounded-xl object-cover" />
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] uppercase tracking-widest text-muted truncate">
                   {m.playing ? 'Now playing · ' : ''}
@@ -26,7 +26,7 @@ export default function Music() {
                 </p>
                 <p className="font-medium truncate">{song.title}</p>
                 <p className="text-sm text-muted truncate">{song.artist}</p>
-                <div className="flex items-center gap-1 mt-2 -ml-2">
+                <div className="flex flex-wrap items-center gap-1 mt-2 -ml-2">
                   <HeartButton saved={saved} onClick={() => (saved ? m.removeSong(song.id) : m.addSong(song))} />
                   <IconButton label="Previous" onClick={m.prev}>
                     <path d="M6 5h2v14H6zM20 5v14L9 12z" />
@@ -46,7 +46,7 @@ export default function Music() {
             </div>
           )}
         </div>
-        <div className="rounded-3xl bg-surface/70 border border-ink/10 p-5">
+        <div className="min-w-0 rounded-3xl bg-surface/70 border border-ink/10 p-4 sm:p-5">
           <h2 className="text-xs uppercase tracking-widest text-muted mb-3">Add a song</h2>
           <AddSong />
         </div>

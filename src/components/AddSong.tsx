@@ -52,10 +52,10 @@ export default function AddSong() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder={canSearch ? 'Search any song or paste a YouTube link' : 'Paste a YouTube link, or type to search'}
+          placeholder={canSearch ? 'Search a song or paste a link' : 'Paste a YouTube link, or type to search'}
           className="min-w-0 flex-1 rounded-full bg-bg/60 border border-ink/15 px-5 py-3 outline-none focus:border-accent"
         />
-        <button disabled={busy || !q.trim()} className="shrink-0 rounded-full bg-accent text-bg px-6 font-medium disabled:opacity-40">
+        <button disabled={busy || !q.trim()} className="shrink-0 rounded-full bg-accent text-bg px-4 sm:px-6 font-medium disabled:opacity-40">
           {busy ? '…' : videoId(q) ? 'Add' : 'Search'}
         </button>
       </form>

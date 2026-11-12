@@ -14,8 +14,10 @@ const NOISE = /\s*[([][^)\]]*\b(official|lyrics?|audio|video|visuali[sz]er|hd|4k
 
 function split(raw: string, channel: string) {
   const t = raw.replace(NOISE, '').trim()
-  const m = t.match(/^(.+?)\s+[-–—|]\s+(.+)$/)
-  return m ? { artist: m[1].trim(), title: m[2].trim() } : { artist: channel.replace(/( - Topic|VEVO)$/, '').trim(), title: t }
+  const owner = channel.replace(/( - Topic|VEVO)$/, '').trim()
+  if (t.includes('|')) return { artist: owner, title: t.split(/\s+[-–—|]\s+|\|/)[0].trim() }
+  const m = t.match(/^(.+?)\s+[-–—]\s+(.+)$/)
+  return m ? { artist: m[1].trim(), title: m[2].trim() } : { artist: owner, title: t }
 }
 
 function decode(s: string) {

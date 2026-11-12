@@ -130,7 +130,10 @@ function SignIn() {
         </button>
       </form>
       {state === 'error' && <p className="mt-4 text-sm text-red-500">{error}</p>}
-      <p className="mt-6 text-xs text-muted">No password needed. We only use your email to log you in.</p>
+      <p className="mt-6 text-xs text-muted">
+        No password needed. We only use your email to log you in. Trouble logging in?{' '}
+        <Link to="/help" className="underline hover:text-ink">Get help</Link>
+      </p>
     </Card>
   )
 }
@@ -172,6 +175,9 @@ function Account({ name, email, syncing }: { name: string; email: string; syncin
         </button>
       </div>
       {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
+      <p className="mt-6 text-xs text-muted">
+        Need help? <Link to="/help" className="underline hover:text-ink">Help & contact</Link>
+      </p>
     </Card>
   )
 }

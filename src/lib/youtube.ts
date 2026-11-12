@@ -31,9 +31,34 @@ export async function lookup(id: string): Promise<Song | null> {
   return { id, ...split(j.title, j.author_name) }
 }
 
-export async function search(q: string): Promise<Song[]> {
+const CACHE = 'aura.ytSearch'
+const TTL = 7 * 24 * 3600e3
+type Cache = Record<string, { at: number; songs: Song[] }>
+
+function readCache(): Cache {
+  try {
+    return JSON.parse(localStorage.getItem(CACHE) ?? '{}') as Cache
+  } catch {
+    return {}
+  }
+}
+
+export async function search(query: string): Promise<Song[]> {
+  const q = query.trim().toLowerCase().replace(/\s+/g, ' ')
+  const cache = readCache()
+  const hit = cache[q]
+  if (hit && Date.now() - hit.at < TTL) return hit.songs
+  const songs = await fetchSearch(q)
+  const fresh = Object.entries({ ...cache, [q]: { at: Date.now(), songs } })
+    .filter(([, v]) => Date.now() - v.at < TTL)
+    .slice(-100)
+  localStorage.setItem(CACHE, JSON.stringify(Object.fromEntries(fresh)))
+  return songs
+}
+
+async function fetchSearch(q: string): Promise<Song[]> {
   const u = new URL('https://www.googleapis.com/youtube/v3/search')
-  const params = { part: 'snippet', type: 'video', videoEmbeddable: 'true', maxResults: '8', q, key: KEY ?? '' }
+  const params = { part: 'snippet', type: 'video', videoEmbeddable: 'true', videoCategoryId: '10', maxResults: '10', q, key: KEY ?? '' }
   for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v)
   const r = await fetch(u)
   if (!r.ok) throw new Error(`YouTube search failed: ${r.status}`)

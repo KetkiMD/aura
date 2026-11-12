@@ -59,6 +59,7 @@ export default function Layout() {
               </Link>
             )}
             <AccountButton {...auth} />
+            <HelpButton />
           </nav>
           <div className="md:hidden flex items-center gap-2">
             {!result && (
@@ -67,6 +68,7 @@ export default function Layout() {
               </Link>
             )}
             <AccountButton {...auth} />
+            <HelpButton />
           </div>
         </div>
       </header>
@@ -101,6 +103,23 @@ export default function Layout() {
       </nav>
     </div>
     </MusicProvider>
+  )
+}
+
+function HelpButton() {
+  return (
+    <NavLink
+      to="/help"
+      aria-label="Help & contact"
+      title="Help & contact"
+      className={({ isActive }) =>
+        `ml-1 w-9 h-9 shrink-0 rounded-full grid place-items-center border text-sm font-medium transition ${
+          isActive ? 'bg-ink text-bg border-ink' : 'border-ink/20 text-muted hover:text-ink hover:border-ink/50'
+        }`
+      }
+    >
+      ?
+    </NavLink>
   )
 }
 

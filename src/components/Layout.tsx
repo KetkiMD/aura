@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { byId } from '../data/aesthetics'
+import { useAuth } from '../lib/authContext'
 import { useResult, useVibe } from '../lib/store'
 import { applyTheme, DEFAULT_THEME } from '../lib/theme'
 
@@ -14,6 +15,7 @@ export default function Layout() {
   const { pathname } = useLocation()
   const [result] = useResult()
   const [vibe] = useVibe()
+  const auth = useAuth()
   const signature = pathname === '/' || pathname === '/quiz'
   const activeId = signature ? null : (pathname === '/explore' ? vibe : null) ?? result?.primary ?? null
   const active = activeId ? byId(activeId) : undefined
@@ -50,12 +52,16 @@ export default function Layout() {
                 Take the quiz
               </Link>
             )}
+            <AccountButton {...auth} />
           </nav>
-          {!result && (
-            <Link to="/quiz" className="md:hidden px-4 py-2 rounded-full text-xs bg-accent text-bg font-medium">
-              Take the quiz
-            </Link>
-          )}
+          <div className="md:hidden flex items-center gap-2">
+            {!result && (
+              <Link to="/quiz" className="px-4 py-2 rounded-full text-xs bg-accent text-bg font-medium">
+                Take the quiz
+              </Link>
+            )}
+            <AccountButton {...auth} />
+          </div>
         </div>
       </header>
 
@@ -115,5 +121,23 @@ function MusicPlayer({ name, emoji, playlist }: { name: string; emoji: string; p
         </span>
       </button>
     </div>
+  )
+}
+
+function AccountButton({ enabled, session }: ReturnType<typeof useAuth>) {
+  if (!enabled) return null
+  if (!session)
+    return (
+      <Link to="/login" className="ml-1 px-4 py-2 rounded-full text-xs md:text-sm border border-ink/20 hover:border-ink/50">
+        Log in
+      </Link>
+    )
+  const meta = session.user.user_metadata ?? {}
+  const pic = (meta.avatar_url || meta.picture) as string | undefined
+  const initial = ((meta.full_name || session.user.email || '?') as string)[0].toUpperCase()
+  return (
+    <Link to="/login" title="Your account" className="ml-1 w-9 h-9 rounded-full overflow-hidden grid place-items-center bg-accent text-bg font-medium">
+      {pic ? <img src={pic} alt="" referrerPolicy="no-referrer" className="w-full h-full object-cover" /> : initial}
+    </Link>
   )
 }

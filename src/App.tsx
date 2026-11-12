@@ -6,6 +6,7 @@ import MyAesthetic from './pages/MyAesthetic'
 import Explore from './pages/Explore'
 import MySpace from './pages/MySpace'
 import Match from './pages/Match'
+import Login from './pages/Login'
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="explore" element={<Explore />} />
         <Route path="space" element={<MySpace />} />
         <Route path="match" element={<Match />} />
+        <Route path="login" element={<Login />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

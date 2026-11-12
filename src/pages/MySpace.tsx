@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { byId, pexelsUrl } from '../data/aesthetics'
+import { useAuth } from '../lib/authContext'
 import type { Ritual } from '../lib/store'
 import { todayISO, uid, useBoards, useResult, useRituals, useSaved } from '../lib/store'
 
@@ -76,9 +77,22 @@ const daysUntil = (iso: string) => Math.round((toDate(iso).getTime() - toDate(to
 
 export default function MySpace() {
   const [tab, setTab] = useState<'boards' | 'calendar'>('boards')
+  const { enabled, ready, session } = useAuth()
   return (
     <div className="mx-auto max-w-6xl px-5 py-10">
       <h1 className="font-display text-4xl md:text-5xl">My Space</h1>
+      {enabled && ready && !session && (
+        <Link
+          to="/login"
+          className="mt-5 flex items-center justify-between gap-4 rounded-2xl border border-ink/10 bg-surface/70 px-5 py-4 hover:border-ink/30 transition"
+        >
+          <span className="text-sm">
+            <span className="font-medium">Keep your space on every device.</span>{' '}
+            <span className="text-muted">Log in to sync boards, pins and rituals.</span>
+          </span>
+          <span className="shrink-0 rounded-full bg-accent text-bg px-4 py-2 text-sm font-medium">Log in</span>
+        </Link>
+      )}
       <div className="inline-flex mt-6 p-1 rounded-full bg-surface border border-ink/10">
         {(['boards', 'calendar'] as const).map((t) => (
           <button

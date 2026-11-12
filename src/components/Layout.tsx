@@ -4,6 +4,8 @@ import { byId } from '../data/aesthetics'
 import { useAuth } from '../lib/authContext'
 import { MusicProvider } from '../lib/music'
 import Player from './Player'
+
+const DEFAULT_VIBE = 'clean-girl'
 import { useResult, useVibe } from '../lib/store'
 import { applyTheme, DEFAULT_THEME } from '../lib/theme'
 
@@ -72,7 +74,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <Player vibe={active?.id} />
+      <Player vibe={active?.id ?? result?.primary ?? (pathname === '/explore' ? vibe : null) ?? DEFAULT_VIBE} />
 
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-surface/90 backdrop-blur-xl border-t border-ink/10">
         <div className="grid grid-cols-3">

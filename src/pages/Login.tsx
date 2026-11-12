@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { AESTHETICS, pexelsUrl } from '../data/aesthetics'
 import { displayName, redirectUrl, useAuth } from '../lib/authContext'
 import { supabase } from '../lib/supabase'
-import { forgetLocal } from '../lib/sync'
+import { flushPending, forgetLocal } from '../lib/sync'
 
 const COLLAGE = ['coquette', 'old-money', 'cottagecore', 'coastal', 'royal-rajasthani', 'soft-korean'].map(
   (id) => AESTHETICS.find((a) => a.id === id)!.images[2],
@@ -137,7 +137,17 @@ function SignIn() {
 
 function Account({ name, email, syncing }: { name: string; email: string; syncing: boolean }) {
   const navigate = useNavigate()
+  const [leaving, setLeaving] = useState(false)
+  const [error, setError] = useState('')
   const logout = async () => {
+    if (leaving) return
+    setLeaving(true)
+    setError('')
+    if (!(await flushPending())) {
+      setError("Couldn't save your latest changes. Check your connection and try again.")
+      setLeaving(false)
+      return
+    }
     await supabase!.auth.signOut()
     forgetLocal()
     navigate('/')
@@ -153,10 +163,15 @@ function Account({ name, email, syncing }: { name: string; email: string; syncin
         <Link to="/space" className="rounded-full bg-accent text-bg px-6 py-3 font-medium">
           Go to My Space
         </Link>
-        <button onClick={logout} className="rounded-full border border-ink/20 px-6 py-3">
-          Log out
+        <button
+          onClick={logout}
+          disabled={leaving}
+          className="rounded-full border border-ink/20 px-6 py-3 disabled:opacity-60"
+        >
+          {leaving ? 'Saving…' : 'Log out'}
         </button>
       </div>
+      {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
     </Card>
   )
 }

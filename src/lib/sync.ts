@@ -37,18 +37,35 @@ export function forgetLocal() {
   localStorage.removeItem(SYNCED)
 }
 
+let flusher: (() => Promise<boolean>) | null = null
+
+export const flushPending = () => (flusher ? flusher() : Promise.resolve(true))
+
 export function startSync(userId: string, setSyncing: (v: boolean) => void) {
   const db = supabase
   if (!db) return
   let cancelled = false
   let ready = false
   let timer: ReturnType<typeof setTimeout> | undefined
+  let inflight: Promise<boolean> = Promise.resolve(true)
 
-  const push = async () => {
+  const push = () => {
     timer = undefined
     setSyncing(true)
-    await db.from('user_data').upsert({ user_id: userId, data: snapshot(), updated_at: new Date().toISOString() })
-    if (!cancelled) setSyncing(false)
+    inflight = inflight.then(async () => {
+      const { error } = await db
+        .from('user_data')
+        .upsert({ user_id: userId, data: snapshot(), updated_at: new Date().toISOString() })
+      if (!cancelled) setSyncing(false)
+      return !error
+    })
+    return inflight
+  }
+
+  flusher = () => {
+    if (!timer) return inflight
+    clearTimeout(timer)
+    return push()
   }
 
   const pull = async (first: boolean) => {
@@ -99,6 +116,7 @@ export function startSync(userId: string, setSyncing: (v: boolean) => void) {
 
   return () => {
     cancelled = true
+    flusher = null
     off()
     clearTimeout(timer)
     document.removeEventListener('visibilitychange', onVisible)

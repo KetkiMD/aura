@@ -75,6 +75,12 @@ export default function Layout() {
         <Outlet />
       </main>
 
+      {pathname !== '/' && (
+        <footer className="border-t border-ink/10 py-6 text-center text-xs text-muted">
+          © AURA · <Link to="/help" className="underline hover:text-ink">Help & contact</Link>
+        </footer>
+      )}
+
       <Player vibe={active?.id ?? result?.primary ?? (pathname === '/explore' ? vibe : null) ?? DEFAULT_VIBE} />
 
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-surface/90 backdrop-blur-xl border-t border-ink/10">

@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { SONGS } from '../data/songs'
 import type { Song } from '../data/songs'
-import { MusicContext } from './musicContext'
+import { MINE, MusicContext } from './musicContext'
+import { usePlaylist } from './store'
 
 type YTPlayer = {
   loadVideoById(id: string): void
@@ -51,15 +52,20 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [playing, setPlaying] = useState(false)
   const [started, setStarted] = useState(false)
   const [shuffle, setShuffle] = useState(false)
+  const [playlist, setPlaylist] = usePlaylist()
 
   const host = useRef<HTMLDivElement | null>(null)
   const player = useRef<Promise<YTPlayer> | null>(null)
-  const state = useRef({ queue, index, playing, started, shuffle, vibe })
+  const state = useRef({ queue, index, playing, started, shuffle, vibe, playlist })
   const skip = useRef((d: number) => void d)
+  const pinned = useRef(false)
+  const followed = useRef<string | null>(null)
 
   useEffect(() => {
-    state.current = { queue, index, playing, started, shuffle, vibe }
+    state.current = { queue, index, playing, started, shuffle, vibe, playlist }
   })
+
+  const listFor = (v: string | null) => (v === MINE ? playlist : (SONGS[v ?? ''] ?? []))
 
   const load = useCallback((q: Song[], i: number) => {
     setQueue(q)
@@ -105,8 +111,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   }, [load])
 
   const follow = useCallback((v: string) => {
+    followed.current = v
     const s = state.current
-    if (s.playing || s.vibe === v) return
+    if (pinned.current || s.playing || s.vibe === v) return
     const list = SONGS[v] ?? []
     const q = s.shuffle ? shuffled(list) : list
     setVibe(v)
@@ -124,7 +131,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     shuffle,
     follow,
     playVibe: (v: string) => {
-      const list = SONGS[v] ?? []
+      const list = listFor(v)
+      if (!list.length) return
+      pinned.current = true
       setVibe(v)
       load(shuffle ? shuffled(list) : list, 0)
     },
@@ -137,7 +146,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     prev: () => skip.current(-1),
     toggleShuffle: () => {
       const current = queue[index]
-      const base = SONGS[vibe ?? ''] ?? []
+      const base = listFor(vibe)
       setShuffle(!shuffle)
       if (!shuffle) {
         setQueue(shuffled(base, current))
@@ -149,6 +158,29 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     },
     mount: (el: HTMLDivElement | null) => {
       host.current = el
+    },
+    playlist,
+    addSong: (song: Song) => {
+      if (playlist.some((s) => s.id === song.id)) return
+      setPlaylist([...playlist, song])
+      if (vibe === MINE) setQueue([...queue, song])
+    },
+    removeSong: (id: string) => {
+      const rest = playlist.filter((s) => s.id !== id)
+      setPlaylist(rest)
+      if (vibe !== MINE) return
+      if (!rest.length) {
+        pinned.current = false
+        const v = followed.current ?? 'clean-girl'
+        setVibe(v)
+        setQueue(SONGS[v] ?? [])
+        setIndex(0)
+        return
+      }
+      const i = queue.findIndex((s) => s.id === id)
+      if (i < 0) return
+      setQueue(queue.filter((s) => s.id !== id))
+      if (i < index || index >= queue.length - 1) setIndex(Math.max(0, index - 1))
     },
   }
 

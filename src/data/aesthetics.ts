@@ -12,7 +12,6 @@ export type Aesthetic = {
   keywords: string[]
   outfits: string[]
   rooms: string[]
-  playlist: string
   palette: string[]
   theme: ThemeVars
   related: string[]
@@ -119,8 +118,7 @@ export const AESTHETICS: Aesthetic[] = [
    "2005009",
    "38492283",
    "4057662"
-  ],
-  "playlist": "37i9dQZF1DX17GkScaAekA"
+  ]
  },
  {
   "id": "clean-girl",
@@ -220,8 +218,7 @@ export const AESTHETICS: Aesthetic[] = [
    "8356224",
    "37384060",
    "4004226"
-  ],
-  "playlist": "58F1FFUDroBF6RbrZLT1La"
+  ]
  },
  {
   "id": "coquette",
@@ -311,8 +308,7 @@ export const AESTHETICS: Aesthetic[] = [
    "7227204",
    "10961457",
    "8753093"
-  ],
-  "playlist": "7cfCMtYWeRMh1D3BpzcUG5"
+  ]
  },
  {
   "id": "cottagecore",
@@ -415,8 +411,7 @@ export const AESTHETICS: Aesthetic[] = [
    "36575302",
    "14249262",
    "7772134"
-  ],
-  "playlist": "1Lk1TOPytr2JGul2pYyZdE"
+  ]
  },
  {
   "id": "y2k",
@@ -505,8 +500,7 @@ export const AESTHETICS: Aesthetic[] = [
    "14212241",
    "4000317",
    "8475350"
-  ],
-  "playlist": "37i9dQZF1DX6MAQN3OnFEl"
+  ]
  },
  {
   "id": "old-money",
@@ -590,8 +584,7 @@ export const AESTHETICS: Aesthetic[] = [
    "14702697",
    "31281864",
    "31281869"
-  ],
-  "playlist": "0q63F2FaPTWyPiCDfPLKga"
+  ]
  },
  {
   "id": "boho",
@@ -690,8 +683,7 @@ export const AESTHETICS: Aesthetic[] = [
    "12181250",
    "38278219",
    "5211547"
-  ],
-  "playlist": "25rUa2y2yd6Ie2MWD2uZXW"
+  ]
  },
  {
   "id": "desi-retro",
@@ -782,8 +774,7 @@ export const AESTHETICS: Aesthetic[] = [
    "29494878",
    "37415386",
    "31683076"
-  ],
-  "playlist": "3eePXCTXTVgjTOw2JyEMyj"
+  ]
  },
  {
   "id": "streetwear",
@@ -863,8 +854,7 @@ export const AESTHETICS: Aesthetic[] = [
    "10950880",
    "6389787",
    "226376"
-  ],
-  "playlist": "3f3ZdpYSUXDP7knEJQ4Fu0"
+  ]
  },
  {
   "id": "grunge",
@@ -941,8 +931,7 @@ export const AESTHETICS: Aesthetic[] = [
    "18447992",
    "33624546",
    "16929212"
-  ],
-  "playlist": "5pUcoEbHCxPzczArNXS2Mw"
+  ]
  },
  {
   "id": "coastal",
@@ -1033,8 +1022,7 @@ export const AESTHETICS: Aesthetic[] = [
    "13184763",
    "27296616",
    "31854429"
-  ],
-  "playlist": "4fGbJQm6UuNO48iSnA6QLz"
+  ]
  },
  {
   "id": "fairycore",
@@ -1134,8 +1122,7 @@ export const AESTHETICS: Aesthetic[] = [
    "14094833",
    "29120822",
    "16114621"
-  ],
-  "playlist": "1JJxZQj9iVeatT29XmeBpv"
+  ]
  },
  {
   "id": "minimal",
@@ -1233,8 +1220,7 @@ export const AESTHETICS: Aesthetic[] = [
    "31145641",
    "38094568",
    "35242187"
-  ],
-  "playlist": "2PWqtRTop5iLJUMVu92i6k"
+  ]
  },
  {
   "id": "indie-desi",
@@ -1325,8 +1311,7 @@ export const AESTHETICS: Aesthetic[] = [
    "34026174",
    "39297588",
    "35543412"
-  ],
-  "playlist": "5OgY7VGPMuVBdqJMHl3g0S"
+  ]
  },
  {
   "id": "royal-rajasthani",
@@ -1414,8 +1399,7 @@ export const AESTHETICS: Aesthetic[] = [
    "36478020",
    "9238973",
    "29997441"
-  ],
-  "playlist": "1hrKfDToIuBL2LK6MKZQWf"
+  ]
  },
  {
   "id": "soft-korean",
@@ -1504,8 +1488,7 @@ export const AESTHETICS: Aesthetic[] = [
    "29956386",
    "31909200",
    "38201757"
-  ],
-  "playlist": "37i9dQZF1DXbirtHQBuwCo"
+  ]
  }
 ]
 

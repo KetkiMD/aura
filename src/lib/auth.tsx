@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { AuthContext } from './authContext'
 import { supabase } from './supabase'
-import { startSync } from './sync'
+import { forgetLocal, hasSyncedAccount, startSync } from './sync'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
@@ -16,7 +16,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(data.session)
       setReady(true)
     })
-    const { data } = supabase.auth.onAuthStateChange((_event, s) => {
+    const { data } = supabase.auth.onAuthStateChange((event, s) => {
+      if (event === 'SIGNED_OUT' && hasSyncedAccount()) forgetLocal()
       setSession(s)
       setReady(true)
     })

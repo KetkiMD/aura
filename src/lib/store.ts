@@ -71,3 +71,4 @@ export const useVibe = () => useStored<string | null>('aura.vibe', null)
 
 export const uid = () => Math.random().toString(36).slice(2, 10)
 export const todayISO = () => new Date().toISOString().slice(0, 10)
+export const nowISO = () => new Date().toISOString()

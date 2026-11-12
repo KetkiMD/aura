@@ -8,6 +8,7 @@ import MySpace from './pages/MySpace'
 import Match from './pages/Match'
 import Login from './pages/Login'
 import Music from './pages/Music'
+import Help from './pages/Help'
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="music" element={<Music />} />
         <Route path="match" element={<Match />} />
         <Route path="login" element={<Login />} />
+        <Route path="help" element={<Help />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

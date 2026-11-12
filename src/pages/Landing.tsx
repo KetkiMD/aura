@@ -87,7 +87,7 @@ export default function Landing() {
       </section>
 
       <footer className="relative border-t border-ink/10 py-8 text-center text-xs text-muted">
-        © AURA · Photos from <a className="underline" href="https://www.pexels.com" target="_blank" rel="noreferrer">Pexels</a> · Music via YouTube
+        © AURA · Photos from <a className="underline" href="https://www.pexels.com" target="_blank" rel="noreferrer">Pexels</a> · Music via YouTube · <Link to="/help" className="underline">Help & contact</Link>
       </footer>
     </div>
   )

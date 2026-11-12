@@ -130,12 +130,14 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     started,
     shuffle,
     follow,
-    playVibe: (v: string) => {
+    playVibe: (v: string, startId?: string) => {
       const list = listFor(v)
       if (!list.length) return
       pinned.current = true
       setVibe(v)
-      load(shuffle ? shuffled(list) : list, 0)
+      const start = list.find((s) => s.id === startId)
+      if (shuffle) load(start ? [start, ...shuffled(list.filter((s) => s !== start))] : shuffled(list), 0)
+      else load(list, Math.max(0, list.indexOf(start as Song)))
     },
     playAt: (i: number) => load(queue, i),
     toggle: () => {

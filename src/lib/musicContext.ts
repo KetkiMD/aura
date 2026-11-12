@@ -1,3 +1,4 @@
+import { byId } from '../data/aesthetics'
 import { createContext, useContext } from 'react'
 import type { Song } from '../data/songs'
 
@@ -9,7 +10,7 @@ export type Music = {
   started: boolean
   shuffle: boolean
   follow: (vibe: string) => void
-  playVibe: (vibe: string) => void
+  playVibe: (vibe: string, startId?: string) => void
   playAt: (index: number) => void
   toggle: () => void
   next: () => void
@@ -22,6 +23,11 @@ export type Music = {
 }
 
 export const MINE = 'mine'
+
+export function vibeLabel(vibe: string | null) {
+  const a = vibe ? byId(vibe) : undefined
+  return a ? `${a.emoji} ${a.name} radio` : '♡ My playlist'
+}
 
 export const MusicContext = createContext<Music | null>(null)
 

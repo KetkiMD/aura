@@ -13,6 +13,7 @@ const NAV = [
   { to: '/explore', label: 'Explore', icon: '✦' },
   { to: '/me', label: 'My Aesthetic', icon: '◐' },
   { to: '/space', label: 'My Space', icon: '❖' },
+  { to: '/music', label: 'Music', icon: '♪' },
 ]
 
 export default function Layout() {
@@ -77,7 +78,7 @@ export default function Layout() {
       <Player vibe={active?.id ?? result?.primary ?? (pathname === '/explore' ? vibe : null) ?? DEFAULT_VIBE} />
 
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-surface/90 backdrop-blur-xl border-t border-ink/10">
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-4">
           {NAV.map((n) => (
             <NavLink
               key={n.to}

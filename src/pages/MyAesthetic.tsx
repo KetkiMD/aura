@@ -3,11 +3,13 @@ import { toPng } from 'html-to-image'
 import { Link, useSearchParams } from 'react-router-dom'
 import { blendName, blendPalette, byId, pexelsUrl } from '../data/aesthetics'
 import { encodeMatch } from '../lib/match'
+import { useMusic } from '../lib/musicContext'
 import type { Result } from '../lib/store'
 import { useResult, useStored } from '../lib/store'
 
 export default function MyAesthetic() {
   const [result] = useResult()
+  const { playVibe } = useMusic()
   const [params] = useSearchParams()
   const cardRef = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState(false)
@@ -130,6 +132,9 @@ export default function MyAesthetic() {
             <Link to="/explore" className="px-6 py-3 rounded-full bg-accent text-bg font-medium">
               Explore my feed →
             </Link>
+            <button onClick={() => playVibe(a.id)} className="px-6 py-3 rounded-full border border-ink/20">
+              ▶ Play my vibe
+            </button>
             <Link to="/quiz" className="px-6 py-3 rounded-full border border-ink/20">
               Retake quiz
             </Link>

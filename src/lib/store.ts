@@ -5,6 +5,29 @@ export type Board = { id: string; name: string; pins: string[] }
 export type Ritual = { id: string; title: string; emoji: string; everyDays: number; lastDone: string; streak: number }
 
 const listeners = new Map<string, Set<() => void>>()
+const writeHooks = new Set<() => void>()
+
+export const SYNC_KEYS = ['aura.result', 'aura.saved', 'aura.boards', 'aura.rituals'] as const
+
+export function onLocalWrite(hook: () => void) {
+  writeHooks.add(hook)
+  return () => {
+    writeHooks.delete(hook)
+  }
+}
+
+export function snapshot(): Record<string, unknown> {
+  return Object.fromEntries(SYNC_KEYS.map((k) => [k, read<unknown>(k, null)]))
+}
+
+export function writeSnapshot(data: Record<string, unknown>) {
+  for (const k of SYNC_KEYS) {
+    const v = data[k]
+    if (v === null || v === undefined) localStorage.removeItem(k)
+    else localStorage.setItem(k, JSON.stringify(v))
+    listeners.get(k)?.forEach((l) => l())
+  }
+}
 
 function read<T>(key: string, fallback: T): T {
   try {
@@ -32,6 +55,7 @@ export function useStored<T>(key: string, fallback: T) {
       const v = typeof next === 'function' ? (next as (p: T) => T)(prev) : next
       localStorage.setItem(key, JSON.stringify(v))
       listeners.get(key)?.forEach((l) => l())
+      if ((SYNC_KEYS as readonly string[]).includes(key)) writeHooks.forEach((h) => h())
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [key],

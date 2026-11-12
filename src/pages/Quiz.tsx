@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AESTHETICS, byId, pexelsUrl } from '../data/aesthetics'
 import { OPTIONS_PER_QUESTION, PICK_POINTS, QUIZ, RELATED_POINTS } from '../data/quiz'
-import { todayISO, useResult, useStored, useVibe } from '../lib/store'
+import { nowISO, useResult, useStored, useVibe } from '../lib/store'
 
 function shuffle<T>(arr: T[]) {
   const a = [...arr]
@@ -54,7 +54,7 @@ export default function Quiz() {
     }
     const scores = score(next)
     const [primary, secondary] = rank(scores, next)
-    setResult({ primary, secondary, scores, takenAt: todayISO() })
+    setResult({ primary, secondary, scores, takenAt: nowISO() })
     setVibe(null)
     if (pendingMatch) {
       setPendingMatch(null)

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import type { Song } from '../data/songs'
 
 export type Result = { primary: string; secondary: string; scores: Record<string, number>; takenAt: string }
 export type Board = { id: string; name: string; pins: string[] }
@@ -7,7 +8,7 @@ export type Ritual = { id: string; title: string; emoji: string; everyDays: numb
 const listeners = new Map<string, Set<() => void>>()
 const writeHooks = new Set<() => void>()
 
-export const SYNC_KEYS = ['aura.result', 'aura.saved', 'aura.boards', 'aura.rituals'] as const
+export const SYNC_KEYS = ['aura.result', 'aura.saved', 'aura.boards', 'aura.rituals', 'aura.playlist'] as const
 
 export function onLocalWrite(hook: () => void) {
   writeHooks.add(hook)
@@ -67,6 +68,7 @@ export const useResult = () => useStored<Result | null>('aura.result', null)
 export const useSaved = () => useStored<string[]>('aura.saved', [])
 export const useBoards = () => useStored<Board[]>('aura.boards', [])
 export const useRituals = () => useStored<Ritual[]>('aura.rituals', [])
+export const usePlaylist = () => useStored<Song[]>('aura.playlist', [])
 export const useVibe = () => useStored<string | null>('aura.vibe', null)
 
 export const uid = () => Math.random().toString(36).slice(2, 10)

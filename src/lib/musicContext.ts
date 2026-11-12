@@ -16,7 +16,12 @@ export type Music = {
   prev: () => void
   toggleShuffle: () => void
   mount: (el: HTMLDivElement | null) => void
+  playlist: Song[]
+  addSong: (song: Song) => void
+  removeSong: (id: string) => void
 }
+
+export const MINE = 'mine'
 
 export const MusicContext = createContext<Music | null>(null)
 

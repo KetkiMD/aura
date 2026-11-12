@@ -1,3 +1,4 @@
+import type { Song } from '../data/songs'
 import type { Board, Result, Ritual } from './store'
 import { onLocalWrite, snapshot, writeSnapshot } from './store'
 import { supabase } from './supabase'
@@ -28,7 +29,8 @@ export function merge(local: Data, remote: Data): Data {
   const rituals = byId(local['aura.rituals'] as Ritual[], remote['aura.rituals'] as Ritual[], (x, y) =>
     x.lastDone >= y.lastDone ? x : y,
   )
-  return { 'aura.result': result, 'aura.saved': saved, 'aura.boards': boards, 'aura.rituals': rituals }
+  const playlist = byId(local['aura.playlist'] as Song[], remote['aura.playlist'] as Song[], (x) => x)
+  return { 'aura.result': result, 'aura.saved': saved, 'aura.boards': boards, 'aura.rituals': rituals, 'aura.playlist': playlist }
 }
 
 export function forgetLocal() {

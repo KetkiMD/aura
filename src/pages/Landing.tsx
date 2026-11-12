@@ -3,10 +3,10 @@ import { AESTHETICS, pexelsUrl } from '../data/aesthetics'
 import { useResult } from '../lib/store'
 
 const FEATURES = [
-  { icon: '◐', title: 'Find your aesthetic', text: 'A 1-minute visual quiz gives you your aesthetic name, palette and a story-ready card.' },
-  { icon: '✦', title: 'Scroll your vibe', text: 'An endless, Pinterest-style feed tuned to you. Save what you love into moodboards.' },
-  { icon: '♪', title: 'Hear your vibe', text: 'Every aesthetic has its own soundtrack that plays while you scroll.' },
-  { icon: '❖', title: 'Glow-up calendar', text: 'Hair trims, nails, skincare, plants — a pretty calendar that remembers it all for you.' },
+  { icon: '◐', title: 'Find your aesthetic', to: '/quiz', text: 'A 1-minute visual quiz gives you your aesthetic name, palette and a story-ready card.' },
+  { icon: '✦', title: 'Scroll your vibe', to: '/explore', text: 'An endless, Pinterest-style feed tuned to you. Save what you love into moodboards.' },
+  { icon: '♪', title: 'Hear your vibe', to: '/music', text: 'Every aesthetic has its own soundtrack that plays while you scroll.' },
+  { icon: '❖', title: 'Glow-up calendar', to: '/space?tab=calendar', text: 'Hair trims, nails, skincare, plants — a pretty calendar that remembers it all for you.' },
 ]
 
 export default function Landing() {
@@ -78,11 +78,16 @@ export default function Landing() {
 
       <section className="relative mx-auto max-w-6xl px-5 pb-24 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {FEATURES.map((f) => (
-          <div key={f.title} className="rounded-3xl border border-ink/10 bg-surface/60 backdrop-blur p-6">
+          <Link
+            key={f.title}
+            to={f.to}
+            className="group block rounded-3xl border border-ink/10 bg-surface/60 backdrop-blur p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:bg-surface/80 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-accent"
+          >
             <div className="text-2xl aura-gradient">{f.icon}</div>
             <h3 className="font-display text-xl mt-3">{f.title}</h3>
             <p className="text-sm text-muted mt-2">{f.text}</p>
-          </div>
+            <span className="inline-block text-sm text-accent mt-4 transition-transform group-hover:translate-x-1">Open →</span>
+          </Link>
         ))}
       </section>
 

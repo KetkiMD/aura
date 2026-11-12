@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { byId, pexelsUrl } from '../data/aesthetics'
 import { useAuth } from '../lib/authContext'
 import type { Ritual } from '../lib/store'
@@ -76,7 +76,8 @@ const nextDue = (r: Ritual) => addDays(r.lastDone, r.everyDays)
 const daysUntil = (iso: string) => Math.round((toDate(iso).getTime() - toDate(todayISO()).getTime()) / DAY)
 
 export default function MySpace() {
-  const [tab, setTab] = useState<'boards' | 'calendar'>('boards')
+  const [params] = useSearchParams()
+  const [tab, setTab] = useState<'boards' | 'calendar'>(params.get('tab') === 'calendar' ? 'calendar' : 'boards')
   const { enabled, ready, session } = useAuth()
   return (
     <div className="mx-auto max-w-6xl px-5 py-10">

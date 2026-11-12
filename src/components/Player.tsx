@@ -14,7 +14,7 @@ export default function Player({ vibe }: { vibe?: string }) {
 
   const a = m.vibe ? byId(m.vibe) : undefined
   const song = m.queue[m.index]
-  if (!a || !song || (!vibe && !m.started)) return null
+  if (!a || !song) return null
 
   return (
     <div className="fixed z-40 right-4 bottom-20 md:bottom-6 w-[calc(100%-2rem)] max-w-sm rounded-3xl bg-surface/95 backdrop-blur-xl border border-ink/10 shadow-2xl overflow-hidden fade-up">

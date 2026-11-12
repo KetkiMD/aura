@@ -10,6 +10,8 @@ const COLLAGE = ['coquette', 'old-money', 'cottagecore', 'coastal', 'royal-rajas
   (id) => AESTHETICS.find((a) => a.id === id)!.images[2],
 )
 
+const googleLogin = import.meta.env.VITE_GOOGLE_LOGIN === 'true'
+
 export default function Login() {
   const { enabled, ready, session, syncing } = useAuth()
 
@@ -98,15 +100,19 @@ function SignIn() {
       <p className="text-muted mb-6">
         Log in to keep your aesthetic, saved pins, moodboards and glow-up calendar on every device.
       </p>
-      <button
-        onClick={google}
-        className="w-full flex items-center justify-center gap-3 rounded-full bg-ink text-bg py-3.5 font-medium hover:opacity-90 transition"
-      >
-        <GoogleIcon /> Continue with Google
-      </button>
-      <div className="flex items-center gap-3 my-6 text-xs uppercase tracking-widest text-muted">
-        <span className="h-px flex-1 bg-ink/15" /> or <span className="h-px flex-1 bg-ink/15" />
-      </div>
+      {googleLogin && (
+        <>
+          <button
+            onClick={google}
+            className="w-full flex items-center justify-center gap-3 rounded-full bg-ink text-bg py-3.5 font-medium hover:opacity-90 transition"
+          >
+            <GoogleIcon /> Continue with Google
+          </button>
+          <div className="flex items-center gap-3 my-6 text-xs uppercase tracking-widest text-muted">
+            <span className="h-px flex-1 bg-ink/15" /> or <span className="h-px flex-1 bg-ink/15" />
+          </div>
+        </>
+      )}
       <form onSubmit={sendLink} className="space-y-3">
         <input
           type="email"

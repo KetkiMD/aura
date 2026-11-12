@@ -24,7 +24,7 @@ npm run build && npm run lint
 ```
 
 ## Login & sync (Supabase)
-Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (e.g. in `.env.production` for the Pages build, `.env.local` for dev). Without them the app runs local-only and the login UI is hidden.
+Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (e.g. in `.env.production` for the Pages build, `.env.local` for dev). Without them the app runs local-only and the login UI is hidden. Email login links work out of the box; set `VITE_GOOGLE_LOGIN=true` once the Google provider is enabled in Supabase.
 
 The table and row-level security live in `supabase/migrations/`. Local stack for development: `npx supabase start` (emails land in Mailpit at http://127.0.0.1:54324).
 

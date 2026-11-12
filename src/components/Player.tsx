@@ -9,6 +9,11 @@ export default function Player({ vibe }: { vibe?: string }) {
   const { follow, mount } = m
   const { pathname } = useLocation()
   const [video, setVideo] = useState(false)
+  const [min, setMinState] = useState(() => localStorage.getItem('aura.playerMin') === '1')
+  const setMin = (v: boolean) => {
+    localStorage.setItem('aura.playerMin', v ? '1' : '0')
+    setMinState(v)
+  }
 
   useEffect(() => {
     if (vibe) follow(vibe)
@@ -19,46 +24,73 @@ export default function Player({ vibe }: { vibe?: string }) {
   const saved = m.playlist.some((s) => s.id === song.id)
 
   return (
-    <div className="fixed z-40 right-4 bottom-20 md:bottom-6 w-[calc(100%-2rem)] max-w-sm rounded-3xl bg-surface/95 backdrop-blur-xl border border-ink/10 shadow-2xl overflow-hidden fade-up">
-      <div className={video ? 'flex flex-col' : 'flex items-center gap-3 p-2 pr-3'}>
+    <div
+      className={`fixed z-40 right-4 bottom-20 md:bottom-6 bg-surface/95 backdrop-blur-xl border border-ink/10 shadow-2xl overflow-hidden fade-up ${
+        min ? 'rounded-full' : 'w-[calc(100%-2rem)] max-w-sm rounded-3xl'
+      }`}
+    >
+      <div className={min ? 'flex items-center gap-1 p-1.5' : video ? 'flex flex-col' : 'flex items-center gap-3 p-2 pr-3'}>
         <div
-          className={`relative shrink-0 overflow-hidden bg-black ${video ? 'w-full aspect-video' : 'w-20 aspect-video rounded-xl'}`}
+          className={`overflow-hidden bg-black ${
+            min
+              ? 'absolute w-px h-px opacity-0 pointer-events-none'
+              : `relative shrink-0 ${video ? 'w-full aspect-video' : 'w-20 aspect-video rounded-xl'}`
+          }`}
         >
           <div ref={mount} className="absolute inset-0 [&>iframe]:w-full [&>iframe]:h-full" />
-          {!m.started && (
+          {!m.started && !min && (
             <button onClick={m.toggle} className="absolute inset-0" aria-label="Play">
               <img src={thumb(song.id)} alt="" className="w-full h-full object-cover" />
             </button>
           )}
         </div>
-        <div className={video ? 'flex items-center gap-2 p-3 pl-4' : 'contents'}>
-          <button onClick={() => setVideo((v) => !v)} className="min-w-0 flex-1 text-left" title={video ? 'Hide video' : 'Show video'}>
-            <span className="block text-[10px] uppercase tracking-widest text-muted truncate">{vibeLabel(m.vibe)}</span>
-            <span className="block font-medium truncate">{song.title}</span>
-            <span className="block text-xs text-muted truncate">{song.artist}</span>
-          </button>
-          <div className="flex items-center gap-1 shrink-0">
-            {video && (
-              <>
-                <HeartButton saved={saved} onClick={() => (saved ? m.removeSong(song.id) : m.addSong(song))} />
-                <IconButton label="Previous" onClick={m.prev}>
-                  <path d="M6 5h2v14H6zM20 5v14L9 12z" />
-                </IconButton>
-              </>
-            )}
+        {min ? (
+          <>
+            <button onClick={() => setMin(false)} aria-label="Expand player" title={`${song.title} · ${song.artist}`} className="shrink-0">
+              <img
+                src={thumb(song.id)}
+                alt=""
+                className={`w-10 h-10 rounded-full object-cover border-2 border-accent/60 ${m.playing ? 'animate-[spin_8s_linear_infinite]' : ''}`}
+              />
+            </button>
             <PlayButton playing={m.playing} onClick={m.toggle} />
-            <IconButton label="Next" onClick={m.next}>
-              <path d="M16 5h2v14h-2zM4 5v14l11-7z" />
+            <IconButton label="Expand player" onClick={() => setMin(false)}>
+              <path d="M7.4 15.4 12 10.8l4.6 4.6L18 14l-6-6-6 6z" />
             </IconButton>
-            {pathname !== '/music' && (
-              <Link to="/music" aria-label="Open Music" title="Search, playlist and vibes" className="grid place-items-center w-9 h-9 rounded-full text-ink hover:bg-ink/10">
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                  <path d="M3 6h12v2H3zm0 5h12v2H3zm0 5h8v2H3zm14-10h4v2h-2v9a3 3 0 1 1-2-2.83z" />
-                </svg>
-              </Link>
-            )}
+          </>
+        ) : (
+          <div className={video ? 'flex items-center gap-2 p-3 pl-4' : 'contents'}>
+            <button onClick={() => setVideo((v) => !v)} className="min-w-0 flex-1 text-left" title={video ? 'Hide video' : 'Show video'}>
+              <span className="block text-[10px] uppercase tracking-widest text-muted truncate">{vibeLabel(m.vibe)}</span>
+              <span className="block font-medium truncate">{song.title}</span>
+              <span className="block text-xs text-muted truncate">{song.artist}</span>
+            </button>
+            <div className="flex items-center gap-1 shrink-0">
+              {video && (
+                <>
+                  <HeartButton saved={saved} onClick={() => (saved ? m.removeSong(song.id) : m.addSong(song))} />
+                  <IconButton label="Previous" onClick={m.prev}>
+                    <path d="M6 5h2v14H6zM20 5v14L9 12z" />
+                  </IconButton>
+                </>
+              )}
+              <PlayButton playing={m.playing} onClick={m.toggle} />
+              <IconButton label="Next" onClick={m.next}>
+                <path d="M16 5h2v14h-2zM4 5v14l11-7z" />
+              </IconButton>
+              {pathname !== '/music' && (
+                <Link to="/music" aria-label="Open Music" title="Search, playlist and vibes" className="grid place-items-center w-9 h-9 rounded-full text-ink hover:bg-ink/10">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+                    <path d="M3 6h12v2H3zm0 5h12v2H3zm0 5h8v2H3zm14-10h4v2h-2v9a3 3 0 1 1-2-2.83z" />
+                  </svg>
+                </Link>
+              )}
+              <IconButton label="Minimize player" onClick={() => setMin(true)}>
+                <path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" />
+              </IconButton>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )

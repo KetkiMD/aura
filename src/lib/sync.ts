@@ -41,62 +41,62 @@ let flusher: (() => Promise<boolean>) | null = null
 
 export const flushPending = () => (flusher ? flusher() : Promise.resolve(true))
 
+export const hasSyncedAccount = () => !!localStorage.getItem(SYNCED)
+
 export function startSync(userId: string, setSyncing: (v: boolean) => void) {
   const db = supabase
   if (!db) return
   let cancelled = false
   let ready = false
+  let dirty = false
   let timer: ReturnType<typeof setTimeout> | undefined
   let inflight: Promise<boolean> = Promise.resolve(true)
 
   const push = () => {
+    clearTimeout(timer)
     timer = undefined
     setSyncing(true)
     inflight = inflight.then(async () => {
+      dirty = false
       const { error } = await db
         .from('user_data')
         .upsert({ user_id: userId, data: snapshot(), updated_at: new Date().toISOString() })
+      if (error) dirty = true
+      else if (!cancelled) localStorage.setItem(SYNCED, userId)
       if (!cancelled) setSyncing(false)
       return !error
     })
     return inflight
   }
 
-  flusher = () => {
-    if (!timer) return inflight
-    clearTimeout(timer)
-    return push()
-  }
+  flusher = () => (timer || dirty ? push() : inflight)
 
-  const pull = async (first: boolean) => {
+  const pull = async () => {
     setSyncing(true)
     const { data: row, error } = await db.from('user_data').select('data, updated_at').eq('user_id', userId).maybeSingle()
     if (cancelled) return
-    if (error) {
-      setSyncing(false)
-      return
+    if (!error) {
+      if (!row) {
+        await push()
+      } else if (dirty || localStorage.getItem(SYNCED) !== userId) {
+        writeSnapshot(merge(snapshot(), row.data as Data))
+        await push()
+      } else if (Date.parse(row.updated_at) > localStamp()) {
+        writeSnapshot(row.data as Data)
+        localStorage.setItem(STAMP, String(Date.parse(row.updated_at)))
+      } else if (localStamp() > Date.parse(row.updated_at)) {
+        await push()
+      }
+      ready = true
     }
-    const local = snapshot()
-    if (!row) {
-      await push()
-    } else if (first && localStorage.getItem(SYNCED) !== userId) {
-      writeSnapshot(merge(local, row.data as Data))
-      await push()
-    } else if (Date.parse(row.updated_at) > localStamp()) {
-      writeSnapshot(row.data as Data)
-      localStorage.setItem(STAMP, String(Date.parse(row.updated_at)))
-      setSyncing(false)
-    } else if (localStamp() > Date.parse(row.updated_at)) {
-      await push()
-    } else {
-      setSyncing(false)
-    }
-    localStorage.setItem(SYNCED, userId)
-    ready = true
+    if (cancelled) return
+    setSyncing(false)
+    if (ready && dirty && !timer) timer = setTimeout(push, 1000)
   }
 
   const off = onLocalWrite(() => {
     localStorage.setItem(STAMP, String(Date.now()))
+    dirty = true
     if (!ready) return
     clearTimeout(timer)
     timer = setTimeout(push, 1000)
@@ -104,15 +104,14 @@ export function startSync(userId: string, setSyncing: (v: boolean) => void) {
 
   const onVisible = () => {
     if (document.visibilityState === 'hidden' && timer) {
-      clearTimeout(timer)
       void push()
-    } else if (document.visibilityState === 'visible' && ready && !timer) {
-      void pull(false)
+    } else if (document.visibilityState === 'visible' && !timer) {
+      void pull()
     }
   }
   document.addEventListener('visibilitychange', onVisible)
 
-  void pull(true)
+  void pull()
 
   return () => {
     cancelled = true
